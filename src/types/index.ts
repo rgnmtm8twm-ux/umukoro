@@ -88,28 +88,27 @@ export interface Resource {
 }
 
 // Lightweight version for list views
-export interface ResourceSummary
-  extends Pick<
-    Resource,
-    | 'id'
-    | 'title'
-    | 'description'
-    | 'resource_type'
-    | 'level'
-    | 'subject'
-    | 'topic'
-    | 'combination'
-    | 'language'
-    | 'year'
-    | 'file_name'
-    | 'status'
-    | 'is_official'
-    | 'download_count'
-    | 'view_count'
-    | 'published_at'
-    | 'created_at'
-    | 'tags'
-  > {}
+export type ResourceSummary = Pick<
+  Resource,
+  | 'id'
+  | 'title'
+  | 'description'
+  | 'resource_type'
+  | 'level'
+  | 'subject'
+  | 'topic'
+  | 'combination'
+  | 'language'
+  | 'year'
+  | 'file_name'
+  | 'status'
+  | 'is_official'
+  | 'download_count'
+  | 'view_count'
+  | 'published_at'
+  | 'created_at'
+  | 'tags'
+>
 
 // ─── Contributor Profile ──────────────────────────────────────
 
@@ -343,7 +342,7 @@ export interface Question {
 }
 
 // Lightweight version for lists / question picker
-export interface QuestionSummary extends Pick<Question,
+export type QuestionSummary = Pick<Question,
   | 'id'
   | 'question_text'
   | 'type'
@@ -355,7 +354,7 @@ export interface QuestionSummary extends Pick<Question,
   | 'status'
   | 'tags'
   | 'created_at'
-> {}
+>
 
 // ─── Assessment interface ─────────────────────────────────────
 

@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { startAttempt } from '@/actions/umukoro'
 import { LEVEL_LABELS, LEVEL_COLORS } from '@/types'
