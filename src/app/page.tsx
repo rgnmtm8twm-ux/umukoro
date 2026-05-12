@@ -3,11 +3,13 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
   const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any
 
   // Stats for social proof
   const [{ count: assessmentCount }, { count: questionCount }] = await Promise.all([
-    supabase.from('assessments').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-    supabase.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    db.from('assessments').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    db.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'published'),
   ])
 
   return (

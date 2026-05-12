@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any
 
   const [
     { count: totalQuestions },
@@ -12,12 +14,12 @@ export default async function AdminDashboard() {
     { count: publishedAssessments },
     { count: totalAttempts },
   ] = await Promise.all([
-    supabase.from('questions').select('*', { count: 'exact', head: true }),
-    supabase.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-    supabase.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'pending_review'),
-    supabase.from('assessments').select('*', { count: 'exact', head: true }),
-    supabase.from('assessments').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-    supabase.from('attempts').select('*', { count: 'exact', head: true }).eq('is_complete', true),
+    db.from('questions').select('*', { count: 'exact', head: true }),
+    db.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    db.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'pending_review'),
+    db.from('assessments').select('*', { count: 'exact', head: true }),
+    db.from('assessments').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    db.from('attempts').select('*', { count: 'exact', head: true }).eq('is_complete', true),
   ])
 
   const stats = [
