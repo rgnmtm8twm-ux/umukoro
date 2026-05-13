@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const footerLinks = {
   Platform: [
@@ -28,11 +29,14 @@ export function Footer() {
         <div className="mb-10 grid grid-cols-2 gap-8 sm:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-1">
-            <div className="mb-3 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#3457A6]">
-                <span className="text-xs font-bold text-white">U</span>
-              </div>
-              <span className="text-sm font-semibold text-[#0F172A]">Ubumenyi</span>
+            <div className="mb-3">
+              <Image
+                src="/umukoro-logo.jpg"
+                alt="Umukoro"
+                width={110}
+                height={30}
+                className="h-8 w-auto"
+              />
             </div>
             <p className="mb-3 text-xs leading-relaxed text-[#64748B]">
               Rwanda&apos;s centralized educational resource initiative. Organized, verified, and freely accessible.

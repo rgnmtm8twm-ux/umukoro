@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 
@@ -36,11 +37,15 @@ export function Nav() {
     <header className="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#3457A6]">
-            <span className="text-xs font-bold text-white">U</span>
-          </div>
-          <span className="text-sm font-semibold text-[#0F172A]">Ubumenyi</span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/umukoro-logo.jpg"
+            alt="Umukoro"
+            width={130}
+            height={36}
+            className="h-9 w-auto"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}
