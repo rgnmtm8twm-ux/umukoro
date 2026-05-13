@@ -1,17 +1,36 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
+import { LEVEL_LABELS, LEVEL_COLORS } from '@/types'
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ level?: string; subject?: string; q?: string }>
+}) {
+  const params = await searchParams
   const supabase = await createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
 
-  // Stats for social proof
-  const [{ count: assessmentCount }, { count: questionCount }] = await Promise.all([
-    db.from('assessments').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-    db.from('questions').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-  ])
+  let query = db
+    .from('assessments')
+    .select('id, title, description, level, subject, duration_minutes, total_marks, pass_mark, language, created_at')
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+
+  if (params.level) query = query.eq('level', params.level)
+  if (params.subject) query = query.eq('subject', params.subject)
+  if (params.q) query = query.ilike('title', `%${params.q}%`)
+
+  const { data: assessments } = await query
+
+  const levels = [
+    { key: 'primary', label: 'Primary' },
+    { key: 'o_level', label: "O'Level" },
+    { key: 'a_level', label: "A'Level" },
+    { key: 'tvet', label: 'TVET' },
+  ]
 
   return (
     <div className="min-h-screen bg-white">
@@ -44,145 +63,125 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#ECFDF5] px-4 py-1.5 text-sm font-medium text-[#0D9488]">
-            <span className="h-2 w-2 rounded-full bg-[#0D9488]" />
-            Free for all Rwandan students
-          </div>
-          <h1 className="mb-6 text-4xl font-semibold leading-tight tracking-tight text-[#0F172A] sm:text-5xl">
-            Practice exams built for<br />
-            <span className="text-[#0D9488]">Rwanda&apos;s national curriculum</span>
-          </h1>
-          <p className="mb-10 text-lg leading-relaxed text-[#64748B]">
-            Timed assessments, instant auto-marking, and detailed answer review — designed for
-            PLE, O&apos;Level, and A&apos;Level exam preparation.
-          </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/assessments"
-              className="rounded-lg bg-[#0D9488] px-6 py-3 text-sm font-medium text-white hover:bg-[#0f766e] transition-colors"
-            >
-              Browse Assessments
-            </Link>
-            <Link
-              href="https://getubumenyi.com"
-              className="rounded-lg border border-[#E2E8F0] px-6 py-3 text-sm font-medium text-[#64748B] hover:border-[#CBD5E1] hover:text-[#0F172A] transition-colors"
-            >
-              Get Study Resources
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="border-y border-[#E2E8F0] bg-[#F8FAFC]">
-        <div className="mx-auto max-w-6xl px-6 py-12">
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            <div className="text-center">
-              <p className="text-3xl font-semibold text-[#0F172A]">{assessmentCount ?? 0}+</p>
-              <p className="mt-1 text-sm text-[#64748B]">Published Assessments</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-semibold text-[#0F172A]">{questionCount ?? 0}+</p>
-              <p className="mt-1 text-sm text-[#64748B]">Questions in Bank</p>
-            </div>
-            <div className="col-span-2 text-center sm:col-span-1">
-              <p className="text-3xl font-semibold text-[#0F172A]">Free</p>
-              <p className="mt-1 text-sm text-[#64748B]">Always</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <h2 className="mb-12 text-center text-2xl font-semibold text-[#0F172A]">
-          Built for serious exam prep
-        </h2>
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            {
-              icon: '⏱',
-              title: 'Timed Exams',
-              desc: 'Practice under real exam conditions with countdown timers and auto-submit when time runs out.',
-            },
-            {
-              icon: '✅',
-              title: 'Instant Marking',
-              desc: 'MCQ and true/false questions are auto-marked the moment you submit. See your score immediately.',
-            },
-            {
-              icon: '📖',
-              title: 'Answer Review',
-              desc: 'Go through every question after submission. See the correct answer and explanation side by side.',
-            },
-            {
-              icon: '📊',
-              title: 'Progress Tracking',
-              desc: 'Track your scores across multiple attempts and see which subjects need more attention.',
-            },
-            {
-              icon: '🎯',
-              title: 'Curriculum-Aligned',
-              desc: 'Questions written and reviewed by Rwandan educators, aligned to REB syllabi.',
-            },
-            {
-              icon: '📱',
-              title: 'Mobile-First',
-              desc: 'Works on any phone or computer. Study anywhere — no app download required.',
-            },
-          ].map((f) => (
-            <div key={f.title} className="rounded-xl border border-[#E2E8F0] p-6">
-              <div className="mb-3 text-2xl">{f.icon}</div>
-              <h3 className="mb-2 text-sm font-semibold text-[#0F172A]">{f.title}</h3>
-              <p className="text-sm leading-relaxed text-[#64748B]">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Sister site — GetUbumenyi.com Resource Library */}
-      <section className="border-t border-[#E2E8F0] bg-[#F8FAFC]">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#0D9488]">
-              GetUbumenyi.com — Resource Library
-            </div>
-            <h2 className="mb-4 text-2xl font-semibold text-[#0F172A] sm:text-3xl">
-              Need study materials, not just practice questions?
-            </h2>
-            <p className="mb-8 text-base leading-relaxed text-[#64748B]">
-              GetUbumenyi.com is our sister platform — a centralised library of past papers,
-              syllabi, teacher notes and curriculum-aligned study guides for Primary, O&apos;Level,
-              A&apos;Level and TVET learners. Verified contributors, freely accessible.
+      {/* Page content — assessments listing */}
+      <div className="bg-[#F8FAFC]">
+        {/* Page header */}
+        <div className="border-b border-[#E2E8F0] bg-white px-4 py-8 sm:px-8">
+          <div className="mx-auto max-w-5xl">
+            <h1 className="text-2xl font-bold text-[#0F172A]">Assessments</h1>
+            <p className="mt-1 text-sm text-[#64748B]">
+              Practice with past paper questions — auto-marked, curriculum-aligned.
             </p>
-            <Link
-              href="https://getubumenyi.com"
-              className="inline-block rounded-lg border border-[#0D9488] bg-white px-6 py-3 text-sm font-medium text-[#0D9488] hover:bg-[#ECFDF5] transition-colors"
-            >
-              Visit the Resource Library →
-            </Link>
           </div>
         </div>
-      </section>
 
-      {/* CTA */}
-      <section className="bg-[#0D9488]">
-        <div className="mx-auto max-w-6xl px-6 py-16 text-center">
-          <h2 className="mb-4 text-2xl font-semibold text-white">Ready to start practising?</h2>
-          <p className="mb-8 text-[#CCFBF1]">
-            Free for every Rwandan student — no account required to browse.
-          </p>
-          <Link
-            href="/assessments"
-            className="inline-block rounded-lg bg-white px-6 py-3 text-sm font-medium text-[#0D9488] hover:bg-[#F0FDFA] transition-colors"
-          >
-            Browse Assessments
-          </Link>
+        <div className="mx-auto max-w-5xl px-4 py-6 sm:px-8">
+          {/* Filters */}
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            {/* Level pills */}
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/"
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  !params.level ? 'bg-[#3457A6] text-white' : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:border-[#CBD5E1]'
+                }`}
+              >
+                All
+              </Link>
+              {levels.map((l) => (
+                <Link
+                  key={l.key}
+                  href={`/?level=${l.key}${params.q ? `&q=${params.q}` : ''}`}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    params.level === l.key ? 'bg-[#3457A6] text-white' : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:border-[#CBD5E1]'
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Search */}
+            <form method="GET" action="/" className="ml-auto flex items-center gap-2">
+              {params.level && <input type="hidden" name="level" value={params.level} />}
+              <input
+                type="text"
+                name="q"
+                defaultValue={params.q ?? ''}
+                placeholder="Search assessments…"
+                className="rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs text-[#0F172A] outline-none placeholder:text-[#CBD5E1] focus:border-[#3457A6]"
+              />
+              <button type="submit" className="rounded-lg bg-[#3457A6] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#2B4A96]">
+                Search
+              </button>
+            </form>
+          </div>
+
+          {/* Grid */}
+          {assessments && assessments.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {assessments.map((a: any) => (
+                <Link
+                  key={a.id}
+                  href={`/assessments/${a.id}`}
+                  className="group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 shadow-sm transition-all hover:border-[#3457A6]/30 hover:shadow-md"
+                >
+                  <div className="mb-3 flex items-start justify-between gap-2">
+                    {a.level && (
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${LEVEL_COLORS[a.level as keyof typeof LEVEL_COLORS] ?? 'bg-[#F1F5F9] text-[#64748B]'}`}>
+                        {LEVEL_LABELS[a.level as keyof typeof LEVEL_LABELS] ?? a.level}
+                      </span>
+                    )}
+                    {a.duration_minutes && (
+                      <span className="flex items-center gap-1 text-[11px] text-[#94A3B8]">
+                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {a.duration_minutes} min
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="mb-1 font-semibold text-[#0F172A] group-hover:text-[#3457A6] transition-colors leading-snug">
+                    {a.title}
+                  </h3>
+
+                  {a.description && (
+                    <p className="mb-3 line-clamp-2 text-xs text-[#64748B]">{a.description}</p>
+                  )}
+
+                  <div className="mt-auto flex items-center justify-between pt-3 border-t border-[#F1F5F9]">
+                    <div className="flex flex-wrap gap-1.5">
+                      {a.subject && (
+                        <span className="rounded bg-[#F1F5F9] px-2 py-0.5 text-[10px] text-[#64748B]">{a.subject}</span>
+                      )}
+                      {a.total_marks > 0 && (
+                        <span className="rounded bg-[#F1F5F9] px-2 py-0.5 text-[10px] text-[#64748B]">
+                          {a.total_marks} marks
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-semibold text-[#3457A6] group-hover:underline">
+                      Start →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-[#E2E8F0] bg-white py-16 text-center">
+              <svg className="mx-auto mb-4 h-10 w-10 text-[#CBD5E1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <p className="text-sm font-medium text-[#334155]">No assessments available</p>
+              <p className="mt-1 text-xs text-[#94A3B8]">
+                {params.level || params.q ? 'Try adjusting your filters.' : 'Check back soon.'}
+              </p>
+            </div>
+          )}
         </div>
-      </section>
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-[#E2E8F0] bg-white">
