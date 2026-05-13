@@ -16,7 +16,7 @@ const footerLinks = {
   Organization: [
     { label: 'Our Mission', href: '/#mission' },
     { label: 'Partner with us', href: '/#partner' },
-    { label: 'Contact', href: 'mailto:hello@ubumenyi.rw' },
+    { label: 'Contact', href: 'mailto:info@ubumenyi.org' },
   ],
 }
 
@@ -64,13 +64,13 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col items-center justify-between gap-3 border-t border-[#E2E8F0] pt-6 sm:flex-row">
-          <p className="text-xs text-[#94A3B8]">© 2025 Ubumenyi Educational Resource Initiative. All rights reserved.</p>
+          <p className="text-xs text-[#94A3B8]">© 2026 Ubumenyi Educational Resource Initiative. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a
-              href="mailto:hello@ubumenyi.rw"
+              href="mailto:info@ubumenyi.org"
               className="text-xs text-[#64748B] transition-colors hover:text-[#0F172A]"
             >
-              hello@ubumenyi.rw
+              info@ubumenyi.org
             </a>
             <div className="flex items-center gap-1.5 rounded-full border border-[#DBEAFE] bg-[#EFF6FF] px-2.5 py-1">
               <svg className="h-3 w-3 text-[#3457A6]" fill="currentColor" viewBox="0 0 24 24">

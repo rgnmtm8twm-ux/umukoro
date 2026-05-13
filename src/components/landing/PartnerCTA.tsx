@@ -32,10 +32,10 @@ export function PartnerCTA() {
         </div>
 
         <a
-          href="mailto:hello@ubumenyi.rw"
+          href="mailto:info@ubumenyi.org"
           className="inline-block rounded-lg bg-white px-8 py-3 text-sm font-semibold text-[#3457A6] transition-colors hover:bg-[#F8FAFC]"
         >
-          Get in touch — hello@ubumenyi.rw
+          Get in touch — info@ubumenyi.org
         </a>
       </div>
     </section>

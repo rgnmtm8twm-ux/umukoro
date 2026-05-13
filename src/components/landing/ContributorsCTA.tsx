@@ -84,7 +84,7 @@ export function ContributorsCTA() {
             Browse contributors
           </Link>
           <a
-            href="mailto:hello@ubumenyi.rw?subject=Contributor Application"
+            href="mailto:info@ubumenyi.org?subject=Contributor Application"
             className="rounded-lg bg-[#3457A6] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2B4A96]"
           >
             Apply to contribute

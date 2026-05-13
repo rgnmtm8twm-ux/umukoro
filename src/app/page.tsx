@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
@@ -17,12 +18,15 @@ export default async function HomePage() {
       {/* Nav */}
       <nav className="border-b border-[#E2E8F0] bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0D9488]">
-              <span className="text-sm font-bold text-white">M</span>
-            </div>
-            <span className="text-base font-semibold text-[#0F172A]">Umukoro</span>
-          </div>
+          <Link href="/" className="flex items-center" aria-label="Umukoro home">
+            <Image
+              src="/umukoro-logo.jpg"
+              alt="Umukoro"
+              height={32}
+              width={120}
+              priority
+            />
+          </Link>
           <div className="flex items-center gap-4">
             <Link href="/assessments" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors">
               Assessments
@@ -139,6 +143,31 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Sister site — GetUbumenyi.com Resource Library */}
+      <section className="border-t border-[#E2E8F0] bg-[#F8FAFC]">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#0D9488]">
+              GetUbumenyi.com — Resource Library
+            </div>
+            <h2 className="mb-4 text-2xl font-semibold text-[#0F172A] sm:text-3xl">
+              Need study materials, not just practice questions?
+            </h2>
+            <p className="mb-8 text-base leading-relaxed text-[#64748B]">
+              GetUbumenyi.com is our sister platform — a centralised library of past papers,
+              syllabi, teacher notes and curriculum-aligned study guides for Primary, O&apos;Level,
+              A&apos;Level and TVET learners. Verified contributors, freely accessible.
+            </p>
+            <Link
+              href="https://getubumenyi.com"
+              className="inline-block rounded-lg border border-[#0D9488] bg-white px-6 py-3 text-sm font-medium text-[#0D9488] hover:bg-[#ECFDF5] transition-colors"
+            >
+              Visit the Resource Library →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-[#0D9488]">
         <div className="mx-auto max-w-6xl px-6 py-16 text-center">
@@ -159,16 +188,19 @@ export default async function HomePage() {
       <footer className="border-t border-[#E2E8F0] bg-white">
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-[#0D9488]">
-                <span className="text-xs font-bold text-white">M</span>
-              </div>
-              <span className="text-sm font-medium text-[#0F172A]">Umukoro</span>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/umukoro-logo.jpg"
+                alt="Umukoro"
+                height={24}
+                width={90}
+              />
               <span className="text-sm text-[#94A3B8]">· Part of Ubumenyi</span>
             </div>
             <div className="flex items-center gap-6">
               <Link href="/assessments" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors">Assessments</Link>
               <Link href="https://getubumenyi.com" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors">Resources</Link>
+              <a href="mailto:info@ubumenyi.org" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors">info@ubumenyi.org</a>
               <Link href="/admin" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors">Admin</Link>
             </div>
           </div>

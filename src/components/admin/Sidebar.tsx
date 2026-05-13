@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -66,14 +67,14 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-56 flex-col border-r border-[#E2E8F0] bg-white">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 border-b border-[#E2E8F0] px-5 py-4">
-        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-[#0D9488]">
-          <span className="text-xs font-bold text-white">M</span>
-        </div>
-        <div className="min-w-0">
-          <p className="truncate text-xs font-semibold text-[#0F172A]">Umukoro</p>
-          <p className="truncate text-[10px] text-[#94A3B8]">Admin Portal</p>
-        </div>
+      <div className="flex flex-col gap-1 border-b border-[#E2E8F0] px-5 py-4">
+        <Image
+          src="/umukoro-logo.jpg"
+          alt="Umukoro"
+          height={28}
+          width={105}
+        />
+        <p className="truncate text-[10px] text-[#94A3B8]">Admin Portal</p>
       </div>
 
       {/* Nav */}
