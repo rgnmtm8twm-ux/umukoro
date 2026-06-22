@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 
@@ -8,9 +9,14 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: 'Umukoro — Rwanda Assessment Platform',
-  description: 'Practice exams, timed assessments, and instant feedback for Rwandan students. Built for PLE, O\'Level, and A\'Level preparation.',
+export async function generateMetadata(): Promise<Metadata> {
+  const host = (await headers()).get('host') ?? 'umukoro.io'
+  return {
+    metadataBase: new URL(`https://${host}`),
+    title: 'Umukoro — Rwanda Assessment Platform',
+    description:
+      "Practice exams, timed assessments, and instant feedback for Rwandan students. Built for PLE, O'Level, and A'Level preparation.",
+  }
 }
 
 export default function RootLayout({
